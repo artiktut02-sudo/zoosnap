@@ -22,7 +22,45 @@
         h1, h2, h3 { font-family: 'Fredoka One', cursive; color: var(--accent); font-weight: normal; }
         a { text-decoration: none; color: inherit; }
 
-        /* Navigation */
+        /* --- ПРЕЛОАДЕР (Загрузка) --- */
+        #preloader {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: #0d0d12;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            transition: opacity 0.5s ease-out;
+        }
+        .loader-container {
+            position: relative;
+            width: 200px;
+            height: 100px;
+            overflow: hidden;
+        }
+        .runner {
+            position: absolute;
+            bottom: 20px;
+            font-size: 50px;
+            animation: run 1s linear infinite;
+        }
+        .chaser {
+            position: absolute;
+            bottom: 20px;
+            font-size: 50px;
+            animation: chase 1s linear infinite;
+        }
+        @keyframes run {
+            0% { left: -100px; }
+            100% { left: 200px; }
+        }
+        @keyframes chase {
+            0% { left: -200px; }
+            100% { left: 100px; }
+        }
+
+        /* Навигация */
         header { padding: 20px 5%; display: flex; justify-content: space-between; align-items: center; background: rgba(13, 13, 18, 0.95); position: sticky; top: 0; z-index: 100; border-bottom: 2px solid var(--panel); backdrop-filter: blur(10px); }
         .logo { font-size: 28px; font-family: 'Fredoka One'; color: var(--text); cursor: pointer; }
         .logo span { color: var(--accent); }
@@ -71,6 +109,14 @@
     </style>
 </head>
 <body>
+
+    <!-- ПРЕЛОАДЕР -->
+    <div id="preloader">
+        <div class="loader-container">
+            <div class="runner">🏃‍♂️</div>
+            <div class="chaser">📷</div>
+        </div>
+    </div>
 
     <header>
         <div class="logo">📷 ZOO <span>SNAP</span></div>
@@ -143,11 +189,20 @@
     </footer>
 
     <script>
-        // Timer until November 14, 15:00 UTC (which is 18:00 MSK)
+        // ПРЕЛОАДЕР: скрываем через 2 секунды
+        window.addEventListener('load', () => {
+            setTimeout(() => {
+                const preloader = document.getElementById('preloader');
+                preloader.style.opacity = '0';
+                setTimeout(() => {
+                    preloader.style.display = 'none';
+                }, 500); // Ждем окончания анимации прозрачности
+            }, 2000); // 2000 мс = 2 секунды
+        });
+
+        // Таймер до 14 ноября
         function updateTimer() {
             const now = new Date();
-            
-            // Target date: current year, November (10th index), 14th day, 15:00 UTC
             const year = now.getFullYear(); 
             const targetDate = new Date(Date.UTC(year, 10, 14, 15, 0, 0)); 
             
