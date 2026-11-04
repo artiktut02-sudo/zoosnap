@@ -22,42 +22,45 @@
         h1, h2, h3 { font-family: 'Fredoka One', cursive; color: var(--accent); font-weight: normal; }
         a { text-decoration: none; color: inherit; }
 
-        /* --- ПРЕЛОАДЕР (Загрузка) --- */
+        /* --- ПРЕЛОАДЕР (KITSUNE) --- */
         #preloader {
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
             background: #0d0d12;
             display: flex;
+            flex-direction: column;
             justify-content: center;
             align-items: center;
             z-index: 9999;
             transition: opacity 0.5s ease-out;
         }
-        .loader-container {
+        .fox-container {
             position: relative;
-            width: 200px;
-            height: 100px;
-            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
         }
-        .runner {
-            position: absolute;
-            bottom: 20px;
-            font-size: 50px;
-            animation: run 1s linear infinite;
+        .fox-icon {
+            font-size: 100px;
+            animation: foxBounce 1s infinite alternate;
+            filter: drop-shadow(0 0 20px rgba(255, 100, 0, 0.8));
         }
-        .chaser {
-            position: absolute;
-            bottom: 20px;
-            font-size: 50px;
-            animation: chase 1s linear infinite;
+        .fox-text {
+            font-family: 'Fredoka One', cursive;
+            font-size: 40px;
+            color: #ff6b00;
+            margin-top: 20px;
+            letter-spacing: 5px;
+            animation: textFade 1.5s ease-in-out;
+            text-shadow: 0 0 10px rgba(255, 100, 0, 0.5);
         }
-        @keyframes run {
-            0% { left: -100px; }
-            100% { left: 200px; }
+        @keyframes foxBounce {
+            0% { transform: translateY(0) scale(1); }
+            100% { transform: translateY(-20px) scale(1.1); }
         }
-        @keyframes chase {
-            0% { left: -200px; }
-            100% { left: 100px; }
+        @keyframes textFade {
+            0% { opacity: 0; transform: translateY(20px); }
+            100% { opacity: 1; transform: translateY(0); }
         }
 
         /* Навигация */
@@ -112,9 +115,9 @@
 
     <!-- ПРЕЛОАДЕР -->
     <div id="preloader">
-        <div class="loader-container">
-            <div class="runner">🏃‍♂️</div>
-            <div class="chaser">📷</div>
+        <div class="fox-container">
+            <div class="fox-icon">🦊</div>
+            <div class="fox-text">KITSUNE</div>
         </div>
     </div>
 
@@ -155,10 +158,10 @@
         <h2>🔥 Global Events</h2>
         <div class="grid">
             <div class="card event-card" style="grid-column: 1 / -1; text-align: center;">
-                <div class="event-tag" style="background: #ffc800; color: #000; position: static; display: inline-block; margin-bottom: 15px;">NOVEMBER 14 • 18:00 MSK</div>
+                <div class="event-tag" style="background: #ffc800; color: #000; position: static; display: inline-block; margin-bottom: 15px;">NOVEMBER 14 • RIO DE JANEIRO</div>
                 <h3 style="font-size: 32px; margin-bottom: 10px;">MUSIC OF ART KREST</h3>
                 <p style="margin-bottom: 10px;">Mega-concert at the arena! Walls are falling, exclusive soundtrack is playing, 500 rare pets are spawning.</p>
-                <p style="font-size: 14px; color: #ff6b6b; margin-bottom: 30px;">(In-game, check UTC time — that's 15:00 UTC)</p>
+                <p style="font-size: 14px; color: #ff6b6b; margin-bottom: 30px;">(Event starts at 18:00 BRT — Brasília Time)</p>
                 
                 <div id="timer" style="display: flex; justify-content: center; gap: 20px; font-family: 'Fredoka One'; font-size: 40px; color: var(--accent); margin-bottom: 30px;">
                     <div><span id="days">0</span><div style="font-size: 12px; font-family: 'Montserrat'; color: var(--text-muted);">DAYS</div></div>
@@ -196,15 +199,17 @@
                 preloader.style.opacity = '0';
                 setTimeout(() => {
                     preloader.style.display = 'none';
-                }, 500); // Ждем окончания анимации прозрачности
-            }, 2000); // 2000 мс = 2 секунды
+                }, 500); 
+            }, 2000); 
         });
 
-        // Таймер до 14 ноября
+        // Таймер до 14 ноября, 18:00 по Бразилиа (BRT = UTC-3)
+        // Значит, по UTC это 21:00 (18:00 + 3 часа)
         function updateTimer() {
             const now = new Date();
+            
             const year = now.getFullYear(); 
-            const targetDate = new Date(Date.UTC(year, 10, 14, 15, 0, 0)); 
+            const targetDate = new Date(Date.UTC(year, 10, 14, 21, 0, 0)); 
             
             const diff = targetDate - now;
             
