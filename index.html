@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+ъ<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -369,14 +369,22 @@
     <button id="backToTop">↑</button>
 
     <script>
-        // 1. ПРЕЛОАДЕР
-        window.addEventListener('load', () => {
-            setTimeout(() => {
-                const preloader = document.getElementById('preloader');
+        // 1. ПРЕЛОАДЕР (СО СТРАХОВКОЙ)
+        function hidePreloader() {
+            const preloader = document.getElementById('preloader');
+            if (preloader) {
                 preloader.style.opacity = '0';
-                setTimeout(() => { preloader.style.display = 'none'; }, 500); 
-            }, 2000); 
+                setTimeout(() => { preloader.style.display = 'none'; }, 500);
+            }
+        }
+
+        // Скрываем, когда страница загрузилась
+        window.addEventListener('load', () => {
+            setTimeout(hidePreloader, 1500); // Ждем 1.5 секунды и скрываем
         });
+
+        // СТРАХОВКА: Если что-то пошло не так, скрываем через 3 секунды в любом случае
+        setTimeout(hidePreloader, 3000);
 
         // 2. ЧАСТИЦЫ
         const particlesContainer = document.getElementById('particles');
@@ -437,310 +445,6 @@
         });
 
         // 6. КНОПКА НАВЕРХ
-        const backToTopBtn = document.getElementById('backToTop');
-        window.addEventListener('scroll', () => {
-            if (window.scrollY > 300) {
-                backToTopBtn.classList.add('show');
-            } else {
-                backToTopBtn.classList.remove('show');
-            }
-        });
-        backToTopBtn.addEventListener('click', () => {
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-        });
-    </script>
-
-</body>
-</html><!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ZOO SNAP | Official Website</title>
-    <meta name="description" content="ZOO SNAP - hunt for rare animals. Guides, codes, ART KREST concert schedule and game secrets.">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Montserrat:wght@400;600;800&display=swap" rel="stylesheet">
-    <style>
-        /* --- БАЗОВЫЕ НАСТРОЙКИ --- */
-        :root {
-            --bg: #0d0d12;
-            --panel: #1a1a24;
-            --accent: #ffc800;
-            --secondary: #ff3b3b;
-            --text: #ffffff;
-            --text-muted: #9ea0b0;
-            --gradient: linear-gradient(135deg, #ffc800 0%, #ff6b00 100%);
-        }
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        html { scroll-behavior: smooth; }
-        body { font-family: 'Montserrat', sans-serif; background: var(--bg); color: var(--text); line-height: 1.6; overflow-x: hidden; position: relative; }
-        h1, h2, h3 { font-family: 'Fredoka One', cursive; color: var(--accent); font-weight: normal; }
-        a { text-decoration: none; color: inherit; }
-
-        /* --- ПРЕЛОАДЕР --- */
-        #preloader {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: #0d0d12; display: flex; flex-direction: column;
-            justify-content: center; align-items: center; z-index: 9999;
-            transition: opacity 0.5s ease-out;
-        }
-        .fox-container { display: flex; flex-direction: column; align-items: center; }
-        .fox-icon { font-size: 100px; animation: foxBounce 1s infinite alternate; filter: drop-shadow(0 0 20px rgba(255, 100, 0, 0.8)); }
-        .fox-text { font-family: 'Fredoka One', cursive; font-size: 40px; color: #ff6b00; margin-top: 20px; letter-spacing: 5px; animation: textFade 1.5s ease-in-out; text-shadow: 0 0 10px rgba(255, 100, 0, 0.5); }
-        @keyframes foxBounce { 0% { transform: translateY(0) scale(1); } 100% { transform: translateY(-20px) scale(1.1); } }
-        @keyframes textFade { 0% { opacity: 0; transform: translateY(20px); } 100% { opacity: 1; transform: translateY(0); } }
-
-        /* --- ЧАСТИЦЫ НА ФОНЕ --- */
-        .particles { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 0; }
-        .particle { position: absolute; background: var(--accent); border-radius: 50%; opacity: 0.3; animation: float 10s infinite linear; }
-        @keyframes float {
-            0% { transform: translateY(100vh) scale(0); opacity: 0; }
-            50% { opacity: 0.5; }
-            100% { transform: translateY(-10vh) scale(1); opacity: 0; }
-        }
-
-        /* --- НАВИГАЦИЯ --- */
-        header { padding: 20px 5%; display: flex; justify-content: space-between; align-items: center; background: rgba(13, 13, 18, 0.95); position: sticky; top: 0; z-index: 100; border-bottom: 2px solid var(--panel); backdrop-filter: blur(10px); }
-        .logo { font-size: 28px; font-family: 'Fredoka One'; color: var(--text); cursor: pointer; }
-        .logo span { color: var(--accent); }
-        nav { display: flex; gap: 20px; }
-        nav a { font-weight: 600; font-size: 14px; transition: 0.3s; position: relative; }
-        nav a::after { content: ''; position: absolute; width: 0; height: 2px; bottom: -5px; left: 0; background: var(--accent); transition: 0.3s; }
-        nav a:hover::after { width: 100%; }
-        nav a:hover { color: var(--accent); }
-
-        /* --- ГЛАВНЫЙ ЭКРАН --- */
-        .hero { text-align: center; padding: 150px 20px 100px; position: relative; z-index: 1; background: radial-gradient(circle at center, rgba(255, 200, 0, 0.15) 0%, transparent 70%); }
-        .hero h1 { font-size: clamp(40px, 8vw, 90px); margin-bottom: 20px; text-shadow: 0 4px 30px rgba(255, 200, 0, 0.4); animation: slideUp 1s ease-out; }
-        .hero p { font-size: 18px; color: var(--text-muted); max-width: 700px; margin: 0 auto 40px; animation: slideUp 1.2s ease-out; }
-        .btn { display: inline-block; background: var(--gradient); color: #000; padding: 16px 40px; border-radius: 12px; font-weight: 800; font-size: 16px; transition: 0.3s; box-shadow: 0 4px 0 #b38c00; text-transform: uppercase; position: relative; overflow: hidden; }
-        .btn:hover { transform: translateY(-3px); box-shadow: 0 7px 0 #b38c00; }
-        .btn::before { content: ''; position: absolute; top: 0; left: -100%; width: 100%; height: 100%; background: rgba(255,255,255,0.2); transition: 0.5s; }
-        .btn:hover::before { left: 100%; }
-        @keyframes slideUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
-
-        /* --- КОНТЕЙНЕРЫ --- */
-        .container { padding: 80px 5%; max-width: 1200px; margin: 0 auto; position: relative; z-index: 1; }
-        h2 { font-size: 36px; margin-bottom: 50px; text-align: center; display: flex; align-items: center; justify-content: center; gap: 10px; }
-        
-        /* --- СЕТКА (КАРТОЧКИ) --- */
-        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 25px; }
-        .card { background: var(--panel); border-radius: 16px; padding: 35px; border: 1px solid #2a2a35; transition: all 0.3s ease; position: relative; overflow: hidden; z-index: 1; }
-        .card::before { content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: radial-gradient(circle at center, rgba(255, 200, 0, 0.1) 0%, transparent 70%); opacity: 0; transition: 0.3s; z-index: -1; }
-        .card:hover { border-color: var(--accent); transform: translateY(-8px) scale(1.02); box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
-        .card:hover::before { opacity: 1; }
-        .card h3 { font-size: 22px; margin-bottom: 15px; color: var(--text); transition: 0.3s; }
-        .card:hover h3 { color: var(--accent); }
-        .card p { color: var(--text-muted); font-size: 14px; }
-
-        /* --- ЛОКАЦИИ --- */
-        .locations-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; }
-        .location-item { background: #1e1e28; padding: 15px; border-radius: 10px; text-align: center; font-weight: 600; transition: 0.3s; cursor: pointer; border: 1px solid transparent; }
-        .location-item:hover { background: var(--accent); color: #000; transform: scale(1.05); }
-
-        /* --- ИВЕНТЫ --- */
-        .event-card { background: linear-gradient(135deg, #2a0a0a, #1a0a0a); border-color: #4a1a1a; }
-        .event-card h3 { color: #ff6b6b; }
-        .event-tag { background: #ff3b3b; color: white; padding: 6px 15px; border-radius: 20px; font-size: 11px; font-weight: 800; position: absolute; top: 20px; right: 20px; text-transform: uppercase; box-shadow: 0 0 15px rgba(255, 59, 59, 0.5); }
-
-        /* --- ТАЙМЕР --- */
-        #timer { display: flex; justify-content: center; gap: 20px; font-family: 'Fredoka One'; font-size: 40px; color: var(--accent); margin-bottom: 20px; }
-        .timer-block { background: rgba(0,0,0,0.3); padding: 10px 20px; border-radius: 12px; border: 1px solid rgba(255, 200, 0, 0.2); }
-        .timer-label { font-size: 12px; font-family: 'Montserrat'; color: var(--text-muted); margin-top: 5px; }
-
-        /* --- МУЗЫКА --- */
-        .music-banner { background: linear-gradient(90deg, #1a1a24 0%, #2a2a35 100%); border-radius: 16px; padding: 50px; display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; border: 1px solid #333; position: relative; overflow: hidden; }
-        .music-banner::after { content: '🎵'; position: absolute; right: -20px; bottom: -20px; font-size: 150px; opacity: 0.05; transform: rotate(-15deg); }
-        .music-text h2 { text-align: left; margin-bottom: 10px; font-size: 32px; }
-        .music-text p { color: var(--text-muted); max-width: 500px; }
-        .btn-music { background: var(--secondary); color: white; box-shadow: 0 4px 0 #991818; }
-
-        /* --- ФУТЕР --- */
-        footer { text-align: center; padding: 50px 20px; border-top: 1px solid var(--panel); background: #08080a; position: relative; z-index: 1; }
-        footer p { color: #555; font-size: 12px; margin-bottom: 5px; }
-
-        /* --- КНОПКА НАВЕРХ --- */
-        #backToTop { position: fixed; bottom: 30px; right: 30px; background: var(--accent); color: #000; width: 50px; height: 50px; border-radius: 50%; display: flex; justify-content: center; align-items: center; font-size: 24px; cursor: pointer; opacity: 0; transition: 0.3s; z-index: 100; border: none; font-weight: bold; }
-        #backToTop.show { opacity: 1; }
-        #backToTop:hover { transform: scale(1.1); }
-
-        /* --- АНИМАЦИЯ ПОЯВЛЕНИЯ --- */
-        .fade-in { opacity: 0; transform: translateY(30px); transition: opacity 0.8s ease-out, transform 0.8s ease-out; }
-        .fade-in.visible { opacity: 1; transform: translateY(0); }
-
-        /* --- АДАПТИВ --- */
-        @media (max-width: 768px) {
-            .music-banner { flex-direction: column; text-align: center; gap: 30px; padding: 30px; }
-            .music-text h2 { text-align: center; }
-            #timer { font-size: 24px; gap: 10px; flex-wrap: wrap; }
-            .timer-block { padding: 8px 12px; }
-            nav { display: none; }
-        }
-    </style>
-</head>
-<body>
-
-    <!-- ПРЕЛОАДЕР -->
-    <div id="preloader">
-        <div class="fox-container">
-            <div class="fox-icon">🦊</div>
-            <div class="fox-text">KITSUNE</div>
-        </div>
-    </div>
-
-    <!-- ЧАСТИЦЫ -->
-    <div class="particles" id="particles"></div>
-
-    <header>
-        <div class="logo">📷 ZOO <span>SNAP</span></div>
-        <nav>
-            <a href="#guides">Guides</a>
-            <a href="#locations">Locations</a>
-            <a href="#events">Events</a>
-            <a href="#music">Music</a>
-        </nav>
-    </header>
-
-    <section class="hero">
-        <h1>Hunt for the Shot</h1>
-        <p>Welcome to ZOO SNAP. Explore 10 locations, photograph rare animals with mutations, upgrade your cameras, and become a ZooTube legend!</p>
-        <a href="#" class="btn">🎮 Play on Roblox</a>
-    </section>
-
-    <div class="container fade-in" id="guides">
-        <h2>📖 Guides & Secrets</h2>
-        <div class="grid">
-            <div class="card">
-                <h3>📸 How to farm money?</h3>
-                <p>Buy the <b>Mythic Lens</b> camera (x500 multiplier). Photograph Legendary pets with mutations, upload them to ZooTube, and earn millions!</p>
-            </div>
-            <div class="card">
-                <h3>🧬 Mutations</h3>
-                <p>Mutations (Golden, Shiny, Rainbow) spawn randomly. But during events at the arena, their chance increases to 100%!</p>
-            </div>
-            <div class="card">
-                <h3>🎁 Secret Code</h3>
-                <p>Enter the code <b>KITSUNE</b> in the shop to get a bonus. And if you find the developer in the game — you can photograph him for x1000 views!</p>
-            </div>
-        </div>
-    </div>
-
-    <div class="container fade-in" id="locations">
-        <h2>🌍 10 Locations</h2>
-        <div class="locations-grid">
-            <div class="location-item">🌾 Meadow</div>
-            <div class="location-item">🌲 Pinewoods</div>
-            <div class="location-item">🏜️ Desert</div>
-            <div class="location-item">❄️ Frozen Peak</div>
-            <div class="location-item">🌊 Coral Shallows</div>
-            <div class="location-item">🌴 Jungle</div>
-            <div class="location-item">💎 Crystal Caverns</div>
-            <div class="location-item">🌋 Ashfall Volcano</div>
-            <div class="location-item">🌙 Moonlit Swamp</div>
-            <div class="location-item">🏔️ Skyfall Cliffs</div>
-        </div>
-    </div>
-
-    <div class="container fade-in" id="events">
-        <h2>🔥 Global Events</h2>
-        <div class="grid">
-            <div class="card event-card" style="grid-column: 1 / -1; text-align: center;">
-                <div class="event-tag">NOVEMBER 14 • RIO DE JANEIRO</div>
-                <h3 style="font-size: 36px; margin-bottom: 15px;">MUSIC OF ART KREST</h3>
-                <p style="margin-bottom: 10px; font-size: 16px;">Mega-concert at the arena! Walls are falling, exclusive soundtrack is playing, 500 rare pets are spawning.</p>
-                <p style="font-size: 14px; color: #ff6b6b; margin-bottom: 40px;">(Event starts at 18:00 BRT — Brasília Time)</p>
-                
-                <div id="timer">
-                    <div class="timer-block"><span id="days">0</span><div class="timer-label">DAYS</div></div>
-                    <div class="timer-block"><span id="hours">0</span><div class="timer-label">HOURS</div></div>
-                    <div class="timer-block"><span id="minutes">0</span><div class="timer-label">MINUTES</div></div>
-                    <div class="timer-block"><span id="seconds">0</span><div class="timer-label">SECONDS</div></div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div class="container fade-in">
-        <div class="music-banner" id="music">
-            <div class="music-text">
-                <h2>🎧 Official Soundtrack</h2>
-                <p>Music by Brazilian producer ART KREST. Tracks KITSUNE, FAVELA, TURBO are already in the game.</p>
-            </div>
-            <a href="#" class="btn btn-music">Listen on Audius</a>
-        </div>
-    </div>
-
-    <footer>
-        <p><b>ZOO SNAP</b> © 2026. Made by Kitsune & ART KREST team.</p>
-        <p>Not an official Roblox Corporation product.</p>
-    </footer>
-
-    <!-- КНОПКА НАВЕРХ -->
-    <button id="backToTop">↑</button>
-
-    <script>
-        // 1. ПРЕЛОАДЕР
-        window.addEventListener('load', () => {
-            setTimeout(() => {
-                const preloader = document.getElementById('preloader');
-                preloader.style.opacity = '0';
-                setTimeout(() => { preloader.style.display = 'none'; }, 500); 
-            }, 2000); 
-        });
-
-        // 2. ГЕНЕРАЦИЯ ЧАСТИЦ
-        const particlesContainer = document.getElementById('particles');
-        for (let i = 0; i < 30; i++) {
-            const particle = document.createElement('div');
-            particle.className = 'particle';
-            const size = Math.random() * 5 + 2;
-            particle.style.width = `${size}px`;
-            particle.style.height = `${size}px`;
-            particle.style.left = `${Math.random() * 100}%`;
-            particle.style.animationDuration = `${Math.random() * 10 + 10}s`;
-            particle.style.animationDelay = `${Math.random() * 10}s`;
-            particlesContainer.appendChild(particle);
-        }
-
-        // 3. ТАЙМЕР ДО 14 НОЯБРЯ (18:00 BRT = 21:00 UTC)
-        function updateTimer() {
-            const now = new Date();
-            const year = now.getFullYear(); 
-            const targetDate = new Date(Date.UTC(year, 10, 14, 21, 0, 0)); 
-            const diff = targetDate - now;
-            
-            if (diff <= 0) {
-                document.getElementById('days').innerText = "0";
-                document.getElementById('hours').innerText = "0";
-                document.getElementById('minutes').innerText = "0";
-                document.getElementById('seconds').innerText = "0";
-                return;
-            }
-            const days = Math.floor(diff / (1000 * 60 * 60 * 24));
-            const hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
-            const minutes = Math.floor((diff / 1000 / 60) % 60);
-            const seconds = Math.floor((diff / 1000) % 60);
-            document.getElementById('days').innerText = days;
-            document.getElementById('hours').innerText = hours;
-            document.getElementById('minutes').innerText = minutes;
-            document.getElementById('seconds').innerText = seconds;
-        }
-        setInterval(updateTimer, 1000);
-        updateTimer();
-
-        // 4. АНИМАЦИЯ ПОЯВЛЕНИЯ ПРИ СКРОЛЛЕ
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.classList.add('visible');
-                }
-            });
-        }, { threshold: 0.1 });
-
-        document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
-
-        // 5. КНОПКА НАВЕРХ
         const backToTopBtn = document.getElementById('backToTop');
         window.addEventListener('scroll', () => {
             if (window.scrollY > 300) {
