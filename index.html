@@ -1,4 +1,4 @@
-ъ<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -130,7 +130,7 @@
         .timer-block { background: rgba(0,0,0,0.3); padding: 10px 20px; border-radius: 12px; border: 1px solid rgba(255, 200, 0, 0.2); }
         .timer-label { font-size: 12px; font-family: 'Montserrat'; color: var(--text-muted); margin-top: 5px; }
 
-        /* МУЗЫКА */
+        /* МУЗЫКА И DISCORD */
         .music-banner { background: linear-gradient(90deg, #1a1a24 0%, #2a2a35 100%); border-radius: 16px; padding: 50px; display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; border: 1px solid #333; position: relative; overflow: hidden; }
         .music-banner::after { content: '🎵'; position: absolute; right: -20px; bottom: -20px; font-size: 150px; opacity: 0.05; transform: rotate(-15deg); }
         .music-text h2 { text-align: left; margin-bottom: 10px; font-size: 32px; }
@@ -344,6 +344,17 @@
         </div>
     </div>
 
+    <!-- DISCORD КАНАЛ (НОВЫЙ БЛОК) -->
+    <div class="container fade-in">
+        <div class="music-banner" style="background: linear-gradient(90deg, #1a1a24 0%, #2a2a35 100%); border: 1px solid #5865F2;">
+            <div class="music-text">
+                <h2 style="color: #5865F2;">💬 Join our Discord!</h2>
+                <p>Want to collaborate, report bugs, or just hang out with the developers? Join our official Discord server!</p>
+            </div>
+            <a href="https://discord.gg/ТВОЯ_ССЫЛКА" target="_blank" class="btn" style="background: #5865F2; color: white; box-shadow: 0 4px 0 #3b45a0;">Join Discord</a>
+        </div>
+    </div>
+
     <!-- РАЗРАБОТЧИКИ -->
     <div class="container fade-in">
         <h2>👑 Development Team</h2>
@@ -369,7 +380,7 @@
     <button id="backToTop">↑</button>
 
     <script>
-        // 1. ПРЕЛОАДЕР (СО СТРАХОВКОЙ)
+        // 1. ПРЕЛОАДЕР
         function hidePreloader() {
             const preloader = document.getElementById('preloader');
             if (preloader) {
@@ -377,13 +388,7 @@
                 setTimeout(() => { preloader.style.display = 'none'; }, 500);
             }
         }
-
-        // Скрываем, когда страница загрузилась
-        window.addEventListener('load', () => {
-            setTimeout(hidePreloader, 1500); // Ждем 1.5 секунды и скрываем
-        });
-
-        // СТРАХОВКА: Если что-то пошло не так, скрываем через 3 секунды в любом случае
+        window.addEventListener('load', () => { setTimeout(hidePreloader, 1500); });
         setTimeout(hidePreloader, 3000);
 
         // 2. ЧАСТИЦЫ
